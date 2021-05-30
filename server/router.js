@@ -6,4 +6,8 @@ router
   .route('/pokedex')
     .get(controllers.getAll)
 
+router
+  .route('/pokedex/:type')
+    .get(controllers.getType)
+
 module.exports = router;
