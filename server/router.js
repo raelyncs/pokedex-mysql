@@ -10,4 +10,9 @@ router
   .route('/pokedex/:type')
     .get(controllers.getType)
 
+router
+  .route('/pokedex/:id')
+    .put(controllers.editName)
+    .delete(controllers.delete)
+
 module.exports = router;

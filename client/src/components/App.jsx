@@ -12,7 +12,7 @@ class App extends React.Component {
     }
     this.getPokemon = this.getPokemon.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    // this.submitType = this.submitType.bind(this);
+    this.submitType = this.submitType.bind(this);
   }
 
   componentDidMount() {
@@ -22,8 +22,10 @@ class App extends React.Component {
   getPokemon() {
     axios.get('/api/pokedex')
       .then((response) => {
-        console.log(response.data)
-        this.setState({ pokemon: response.data })
+        this.setState({
+          pokemon: response.data,
+          selectedValue: "Sort by Type"
+        })
       })
       .catch((err) => {
         console.log(err);
@@ -34,28 +36,28 @@ class App extends React.Component {
     this.setState({ selectedValue: event.target.value })
   }
 
-  //show all button click - runs getPokemon
-
   //update type
   //option1 w/ submit button
-  // submitType(){
-  //   axios.get(){
+  submitType(){
+    event.preventDefault()
+    axios.get(`/api/pokedex/${this.state.selectedValue}`)
+      .then((response) => {
+        this.setState({pokemon: response.data})
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
 
-  //   }
-
-  // }
-
-  //option2: if selectedValue is not equal to sort by Type
-    // run the get request
 
   render() {
     return (
       <div>
         <h1>Fullstack Pokedex!</h1>
-        <button>Show All</button>
-        <form onSubmit={this.handleSubmit}>
-          <select id="types" value={this.state.value} onChange={this.handleChange}>
-            <option value="sort by type">Sort by Type</option>
+        <button onClick={this.getPokemon}>Show All</button>
+        <form onSubmit={this.submitType}>
+          <select id="types" value={this.state.selectedValue} onChange={this.handleChange}>
+            <option value="Sort by Type">Sort by Type</option>
             <option value="Grass">Grass</option>
             <option value="Fire">Fire</option>
             <option value="Water">Water</option>
@@ -73,7 +75,11 @@ class App extends React.Component {
           </select>
           <input type='submit' value='submit'/>
         </form>
-        <PokemonList pokemons={this.state.pokemon} />
+        <PokemonList
+        pokemons={this.state.pokemon} currentRender={this.state.selectedValue}
+        getPokemon={this.getPokemon}
+        submitType={this.submitType}
+        />
       </div>
     )
   }

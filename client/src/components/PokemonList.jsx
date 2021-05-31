@@ -6,7 +6,13 @@ function PokemonList(props) {
 
     <div>
       {props.pokemons.map((item,index) =>
-        <Pokemon individual={item} key={index} />
+        <Pokemon
+        individual={item}
+        key={index}
+        currentRender={props.currentRender}
+        getPokemon={props.getPokemon}
+        submitType={props.submitType}
+        />
       )}
     </div>
   )
